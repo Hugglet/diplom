@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>R-SUAI Multi-Robot IDE</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet"
+          href="/static/style.css">
+
+    <!-- CodeMirror CSS -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/dracula.min.css">
+
+    <!-- CodeMirror -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.js"></script>
+
+    <!-- Simple Mode -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/mode/simple.min.js"></script>
+
+    <!-- Placeholder -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/display/placeholder.min.js"></script>
+
+</head>
+
+<body>
+
+    <h1>R-SUAI Multi-Robot IDE</h1>
+
+    <div class="container">
+
+        <!-- ========================================= -->
+        <!-- LEFT PANEL -->
+        <!-- ========================================= -->
+
+        <div class="editor-panel">
+
+            <form method="POST">
+
+                <textarea id="code"
+                          name="rcml"></textarea>
+
+                <div class="buttons">
+
+                    <input type="file"
+                           id="fileInput"
+                           hidden>
+
+                    <button type="button"
+                            onclick="loadFile()">
+
+                        📂 Open
+
+                    </button>
+
+                    <button type="button"
+                            onclick="saveFile()">
+
+                        💾 Save
+
+                    </button>
+
+                    <button type="submit">
+
+                        ▶ Run
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+        <!-- ========================================= -->
+        <!-- RIGHT PANEL -->
+        <!-- ========================================= -->
+
+        <div class="right-panel">
+
+            <div class="output-box">
+
+                <h2>KUKA KRL Output</h2>
+
+                <pre>{{ kuka_code }}</pre>
+
+            </div>
+
+            <div class="output-box">
+
+                <h2>URScript Output</h2>
+
+                <pre>{{ ur_code }}</pre>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- JS -->
+    <script src="/static/script.js"></script>
+
+</body>
+
+</html>

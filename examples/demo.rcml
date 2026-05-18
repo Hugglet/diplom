@@ -1,0 +1,20 @@
+robot kuka KR150
+robot ur UR3e
+
+point pick (100,200,300)
+point place (400,500,300)
+
+task loading {
+
+    parallel {
+
+        kuka.move pick
+        ur.move place
+
+    }
+
+    sync
+
+    kuka.home
+    ur.home
+}

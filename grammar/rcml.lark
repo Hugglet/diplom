@@ -1,0 +1,40 @@
+start: statement+
+
+statement: robot_decl
+         | point_decl
+         | task_decl
+         | parallel_decl
+         | move_cmd
+         | grab_cmd
+         | release_cmd
+         | home_cmd
+         | sync_cmd
+         | wait_cmd
+         | "}"
+
+robot_decl: "robot" NAME NAME
+
+point_decl: "point" NAME "(" NUMBER "," NUMBER "," NUMBER ")"
+
+task_decl: "task" NAME "{"
+
+parallel_decl: "parallel" "{"
+
+move_cmd: NAME "." "move" NAME
+
+grab_cmd: NAME "." "grab"
+
+release_cmd: NAME "." "release"
+
+home_cmd: NAME "." "home"
+
+sync_cmd: "sync"
+
+wait_cmd: "wait" NUMBER
+
+NAME: /[a-zA-Z_][a-zA-Z0-9_]*/
+
+NUMBER: /\d+/
+
+%import common.WS
+%ignore WS
