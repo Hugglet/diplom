@@ -1,0 +1,177 @@
+
+robot kuka KR3
+robot ur UR3e
+
+
+point conveyor_start (100,200,250)
+point conveyor_middle (250,300,250)
+point conveyor_end (400,450,250)
+
+point pallet_red_1 (700,100,150)
+point pallet_red_2 (750,100,150)
+point pallet_red_3 (800,100,150)
+
+point pallet_blue_1 (700,500,150)
+point pallet_blue_2 (750,500,150)
+point pallet_blue_3 (800,500,150)
+
+point inspection_zone (500,300,400)
+
+point kuka_safe (150,100,500)
+point ur_safe (150,600,500)
+
+point exchange_zone (450,350,250)
+
+point reject_zone (900,300,150)
+
+point scan_zone (550,250,300)
+
+point waiting_zone (300,300,450)
+
+point maintenance_zone (1000,1000,300)
+
+
+task logistics_cycle {
+
+    parallel {
+
+        kuka.move conveyor_start
+        ur.move conveyor_middle
+
+    }
+
+    sync
+
+
+    kuka.grab
+    ur.grab
+
+    sync
+
+    parallel {
+
+        kuka.move inspection_zone
+        ur.move inspection_zone
+
+    }
+
+    sync
+
+    kuka.release
+
+    sync
+
+   kuka.move conveyor_start
+
+    sync
+
+
+    ur.move pallet_blue_1
+
+    ur.release
+
+    sync
+
+
+    parallel {
+
+        kuka.move conveyor_middle
+        ur.move conveyor_end
+
+    }
+
+    sync
+
+
+    kuka.grab
+    ur.grab
+
+    sync
+
+
+    parallel {
+
+        kuka.move exchange_zone
+        ur.move exchange_zone
+
+    }
+
+    sync
+
+
+    kuka.release
+    ur.release
+
+    sync
+
+
+    kuka.move pallet_red_1
+    kuka.grab
+
+    kuka.move pallet_red_2
+    kuka.release
+
+    sync
+
+
+    ur.move pallet_blue_2
+    ur.grab
+
+    ur.move pallet_blue_3
+    ur.release
+
+    sync
+
+
+  
+    parallel {
+
+        kuka.move scan_zone
+        ur.move scan_zone
+
+    }
+
+    sync
+
+
+    kuka.grab
+
+    kuka.move inspection_zone
+
+    kuka.release
+
+    sync
+
+
+  
+    ur.move reject_zone
+
+    ur.grab
+
+    ur.move maintenance_zone
+
+    ur.release
+
+    sync
+
+ 
+    parallel {
+
+        kuka.move kuka_safe
+        ur.move ur_safe
+
+    }
+
+    sync
+
+
+    kuka.move waiting_zone
+    ur.move waiting_zone
+
+    sync
+
+
+    kuka.home
+    ur.home
+
+}

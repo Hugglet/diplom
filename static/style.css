@@ -7,7 +7,7 @@
 
 body {
 
-    background: #1e1e1e;
+    background: #181818;
 
     color: white;
 
@@ -16,18 +16,28 @@ body {
     padding: 20px;
 }
 
+/* ========================================= */
+/* TITLE */
+/* ========================================= */
+
 h1 {
 
-    margin-bottom: 20px;
+    font-size: 54px;
 
-    font-size: 32px;
+    margin-bottom: 25px;
+
+    font-weight: bold;
 }
+
+/* ========================================= */
+/* MAIN LAYOUT */
+/* ========================================= */
 
 .container {
 
     display: flex;
 
-    gap: 20px;
+    gap: 24px;
 
     align-items: flex-start;
 }
@@ -47,15 +57,15 @@ h1 {
 
 .CodeMirror {
 
-    width: 100%;
-
     height: 900px;
 
-    border-radius: 12px;
+    border-radius: 18px;
 
-    font-size: 17px;
+    font-size: 18px;
 
     border: 1px solid #333;
+
+    padding-top: 10px;
 }
 
 /* ========================================= */
@@ -66,9 +76,9 @@ h1 {
 
     display: flex;
 
-    gap: 10px;
+    gap: 14px;
 
-    margin-top: 15px;
+    margin-top: 18px;
 }
 
 button {
@@ -79,13 +89,15 @@ button {
 
     border: none;
 
-    padding: 12px 18px;
+    padding: 14px 22px;
 
-    border-radius: 10px;
+    border-radius: 12px;
 
     cursor: pointer;
 
-    font-size: 15px;
+    font-size: 16px;
+
+    transition: 0.2s;
 }
 
 button:hover {
@@ -109,34 +121,100 @@ button:hover {
 }
 
 /* ========================================= */
-/* OUTPUT */
+/* OUTPUT BOX */
 /* ========================================= */
 
 .output-box {
 
-    background: #2a2a2a;
+    background: #232323;
 
-    border-radius: 12px;
+    border-radius: 18px;
 
-    padding: 18px;
+    padding: 20px;
 
     border: 1px solid #333;
 }
 
+/* ========================================= */
+/* OUTPUT TITLES */
+/* ========================================= */
+
 .output-box h2 {
 
-    margin-bottom: 12px;
-
     color: #00ff99;
+
+    margin-bottom: 16px;
+
+    font-size: 22px;
 }
+
+/* ========================================= */
+/* CODE OUTPUT */
+/* ========================================= */
 
 pre {
 
-    white-space: pre-wrap;
+    background: #1b1b1b;
 
-    word-wrap: break-word;
+    border-radius: 12px;
+
+    padding: 14px;
+
+    overflow-x: auto;
 
     font-size: 14px;
 
     line-height: 1.5;
+
+    margin-bottom: 15px;
+
+    color: #ffffff;
+}
+
+/* ========================================= */
+/* RCML LIBRARY */
+/* ========================================= */
+
+.library {
+
+    margin-top: 20px;
+
+    background: #232323;
+
+    border-radius: 18px;
+
+    padding: 20px;
+
+    border: 1px solid #333;
+}
+
+.library h2 {
+
+    color: #00d4ff;
+
+    margin-bottom: 16px;
+
+    font-size: 22px;
+}
+
+.library div {
+
+    background: #333;
+
+    padding: 12px;
+
+    border-radius: 10px;
+
+    margin-top: 10px;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+
+    font-family: monospace;
+}
+
+.library div:hover {
+
+    background: #4a4a4a;
 }

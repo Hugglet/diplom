@@ -38,3 +38,7 @@ NUMBER: /\d+/
 
 %import common.WS
 %ignore WS
+
+COMMENT: /#[^\n]*/
+
+%ignore COMMENT

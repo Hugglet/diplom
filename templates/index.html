@@ -11,23 +11,22 @@
     <title>R-SUAI Multi-Robot IDE</title>
 
     <!-- CSS -->
+
     <link rel="stylesheet"
           href="/static/style.css">
 
-    <!-- CodeMirror CSS -->
+    <!-- CodeMirror -->
+
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css">
 
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/dracula.min.css">
 
-    <!-- CodeMirror -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.js"></script>
 
-    <!-- Simple Mode -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/mode/simple.min.js"></script>
 
-    <!-- Placeholder -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/display/placeholder.min.js"></script>
 
 </head>
@@ -38,68 +37,224 @@
 
     <div class="container">
 
-        <!-- ========================================= -->
+        <!-- ===================================== -->
         <!-- LEFT PANEL -->
-        <!-- ========================================= -->
+        <!-- ===================================== -->
 
         <div class="editor-panel">
 
-            <form method="POST">
+            <textarea id="code"></textarea>
 
-                <textarea id="code"
-                          name="rcml"></textarea>
+            <!-- ================================= -->
+            <!-- BUTTONS -->
+            <!-- ================================= -->
 
-                <div class="buttons">
+            <div class="buttons">
 
-                    <input type="file"
-                           id="fileInput"
-                           hidden>
+                <input type="file"
+                       id="fileInput"
+                       hidden>
 
-                    <button type="button"
-                            onclick="loadFile()">
+                <!-- OPEN -->
 
-                        📂 Open
+                <button
+                    type="button"
+                    onclick="loadFile()">
 
-                    </button>
+                    📂 Open
 
-                    <button type="button"
-                            onclick="saveFile()">
+                </button>
 
-                        💾 Save
+                <!-- SAVE RCML -->
 
-                    </button>
+                <button
+                    type="button"
+                    onclick="saveFile()">
 
-                    <button type="submit">
+                    💾 Save RCML
 
-                        ▶ Run
+                </button>
 
-                    </button>
+                <!-- RUN -->
 
-                </div>
+                <button
+                    type="button"
+                    onclick="runCode()">
 
-            </form>
+                    ▶ Run
 
-        </div>
-
-        <!-- ========================================= -->
-        <!-- RIGHT PANEL -->
-        <!-- ========================================= -->
-
-        <div class="right-panel">
-
-            <div class="output-box">
-
-                <h2>KUKA KRL Output</h2>
-
-                <pre>{{ kuka_code }}</pre>
+                </button>
 
             </div>
 
-            <div class="output-box">
+            <!-- ================================= -->
+            <!-- RCML COMMANDS -->
+            <!-- ================================= -->
+
+            <div class="library">
+
+                <h2>RCML Commands</h2>
+
+                <div onclick="insertCommand('robot kuka KR3')">
+
+                    robot kuka KR3
+
+                </div>
+
+                <div onclick="insertCommand('robot ur UR3e')">
+
+                    robot ur UR3e
+
+                </div>
+
+                <div onclick="insertCommand('point pick (100,200,300)')">
+
+                    point pick
+
+                </div>
+
+                <div onclick="insertCommand('point place (400,500,300)')">
+
+                    point place
+
+                </div>
+
+                <div onclick="insertCommand('task loading {')">
+
+                    task
+
+                </div>
+
+                <div onclick="insertCommand('parallel {')">
+
+                    parallel
+
+                </div>
+
+                <div onclick="insertCommand('kuka.move pick')">
+
+                    kuka.move
+
+                </div>
+
+                <div onclick="insertCommand('ur.move place')">
+
+                    ur.move
+
+                </div>
+
+                <div onclick="insertCommand('kuka.grab')">
+
+                    kuka.grab
+
+                </div>
+
+                <div onclick="insertCommand('ur.release')">
+
+                    ur.release
+
+                </div>
+
+                <div onclick="insertCommand('sync')">
+
+                    sync
+
+                </div>
+
+                <div onclick="insertCommand('kuka.home')">
+
+                    kuka.home
+
+                </div>
+
+                <div onclick="insertCommand('ur.home')">
+
+                    ur.home
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- ===================================== -->
+        <!-- RIGHT PANEL -->
+        <!-- ===================================== -->
+
+        <div class="right-panel">
+
+            <!-- ================================= -->
+            <!-- KUKA SRC -->
+            <!-- ================================= -->
+
+            <div class="output-box"
+                 id="kuka_src_box"
+                 style="display:none;">
+
+                <h2>KUKA SRC Output</h2>
+
+                <pre id="kuka_src"></pre>
+
+                <button
+                    type="button"
+                    onclick="saveOutput(
+                        'kuka_src',
+                        'program.src'
+                    )">
+
+                    Save .src
+
+                </button>
+
+            </div>
+
+            <!-- ================================= -->
+            <!-- KUKA DAT -->
+            <!-- ================================= -->
+
+            <div class="output-box"
+                 id="kuka_dat_box"
+                 style="display:none;">
+
+                <h2>KUKA DAT Output</h2>
+
+                <pre id="kuka_dat"></pre>
+
+                <button
+                    type="button"
+                    onclick="saveOutput(
+                        'kuka_dat',
+                        'program.dat'
+                    )">
+
+                    Save .dat
+
+                </button>
+
+            </div>
+
+            <!-- ================================= -->
+            <!-- UR SCRIPT -->
+            <!-- ================================= -->
+
+            <div class="output-box"
+                 id="ur_box"
+                 style="display:none;">
 
                 <h2>URScript Output</h2>
 
-                <pre>{{ ur_code }}</pre>
+                <pre id="ur_output"></pre>
+
+                <button
+                    type="button"
+                    onclick="saveOutput(
+                        'ur_output',
+                        'program.script'
+                    )">
+
+                    Save .script
+
+                </button>
 
             </div>
 
@@ -108,6 +263,7 @@
     </div>
 
     <!-- JS -->
+
     <script src="/static/script.js"></script>
 
 </body>

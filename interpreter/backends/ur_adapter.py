@@ -5,48 +5,84 @@ class URAdapter(BaseAdapter):
 
     def __init__(self):
 
-        self.program = []
+        self.lines = []
 
-    def execute(self, command, points):
+        self.lines.append("def rcml_program():")
 
-        if command["type"] == "move":
+    # =====================================================
+    # MOVE
+    # =====================================================
 
-            target = command["target"]
+    def move(self, cmd, points):
 
-            point = points.get(target)
+        target = cmd["target"]
 
-            if not point:
-                raise ValueError(f"Unknown point: {target}")
+        point = points[target]
 
-            x = point["x"]
-            y = point["y"]
-            z = point["z"]
+        x = point["x"] / 1000
+        y = point["y"] / 1000
+        z = point["z"] / 1000
 
-            self.program.append(
-                f"movej([{x},{y},{z}])"
+        self.lines.append(
+
+            f"    movel(p["
+
+            f"{x},{y},{z},"
+
+            f"0,3.14,0"
+
+            f"])"
+        )
+
+    # =====================================================
+    # HOME
+    # =====================================================
+
+    def home(self, cmd):
+
+        self.lines.append(
+
+            "    movej([0,-1.57,1.57,0,1.57,0])"
+        )
+
+    # =====================================================
+    # GRAB
+    # =====================================================
+
+    def grab(self):
+
+        self.lines.append(
+            "    # grab"
+        )
+
+    # =====================================================
+    # RELEASE
+    # =====================================================
+
+    def release(self):
+
+        self.lines.append(
+            "    # release"
+        )
+
+    # =====================================================
+    # SAVE
+    # =====================================================
+
+    def save(self):
+
+        self.lines.append("")
+        self.lines.append("end")
+
+        with open(
+
+            "output/ur.script",
+
+            "w"
+
+        ) as f:
+
+            f.write(
+
+                "\n".join(self.lines)
             )
-
-        elif command["type"] == "grab":
-
-            self.program.append(
-                "set_digital_out(0, True)"
-            )
-
-        elif command["type"] == "release":
-
-            self.program.append(
-                "set_digital_out(0, False)"
-            )
-
-        elif command["type"] == "home":
-
-            self.program.append(
-                "movej(home)"
-            )
-
-    def save(self, filename):
-
-        with open(filename, "w") as f:
-
-            for line in self.program:
-                f.write(line + "\n")

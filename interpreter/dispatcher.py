@@ -6,26 +6,89 @@ class Dispatcher:
 
     def __init__(self):
 
-        self.backends = {
-            "KR150": KukaAdapter(),
-            "UR3e": URAdapter()
-        }
+        self.kuka = KukaAdapter()
 
-    def dispatch(self, robot_model, command, points):
+        self.ur = URAdapter()
 
-        backend = self.backends.get(robot_model)
+    # =====================================================
+    # DISPATCH
+    # =====================================================
 
-        if not backend:
-            raise ValueError(f"No backend for {robot_model}")
+    def dispatch(
 
-        backend.execute(command, points)
+        self,
+
+        robot_model,
+
+        cmd,
+
+        points
+
+    ):
+
+        # -------------------------------------------------
+        # SELECT ADAPTER
+        # -------------------------------------------------
+
+        if "KR" in robot_model:
+
+            adapter = self.kuka
+
+        elif "UR" in robot_model:
+
+            adapter = self.ur
+
+        else:
+
+            raise ValueError(
+
+                f"Unknown robot model: {robot_model}"
+            )
+
+        # -------------------------------------------------
+        # COMMAND TYPE
+        # -------------------------------------------------
+
+        cmd_type = cmd["type"]
+
+        # -------------------------------------------------
+        # MOVE
+        # -------------------------------------------------
+
+        if cmd_type == "move":
+
+            adapter.move(cmd, points)
+
+        # -------------------------------------------------
+        # HOME
+        # -------------------------------------------------
+
+        elif cmd_type == "home":
+
+            adapter.home(cmd)
+
+        # -------------------------------------------------
+        # GRAB
+        # -------------------------------------------------
+
+        elif cmd_type == "grab":
+
+            adapter.grab()
+
+        # -------------------------------------------------
+        # RELEASE
+        # -------------------------------------------------
+
+        elif cmd_type == "release":
+
+            adapter.release()
+
+    # =====================================================
+    # SAVE ALL
+    # =====================================================
 
     def save_all(self):
 
-        self.backends["KR150"].save(
-            "output/kuka.src"
-        )
+        self.kuka.save()
 
-        self.backends["UR3e"].save(
-            "output/ur.script"
-        )
+        self.ur.save()

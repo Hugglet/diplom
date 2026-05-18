@@ -5,51 +5,131 @@ class KukaAdapter(BaseAdapter):
 
     def __init__(self):
 
-        self.program = []
+        self.lines = []
 
-    def execute(self, command, points):
+        self.dat_lines = []
 
-        if command["type"] == "move":
+        # =========================================
+        # SRC HEADER
+        # =========================================
 
-            target = command["target"]
+        self.lines.append("&ACCESS RVP")
+        self.lines.append("&REL 1")
+        self.lines.append("")
+        self.lines.append("DEF rcml_auto()")
+        self.lines.append("")
+        self.lines.append("PTP HOME")
+        self.lines.append("")
 
-            point = points.get(target)
+        # =========================================
+        # DAT HEADER
+        # =========================================
 
-            if not point:
-                raise ValueError(f"Unknown point: {target}")
+        self.dat_lines.append("DEFDAT rcml_auto")
+        self.dat_lines.append("")
 
-            x = point["x"]
-            y = point["y"]
-            z = point["z"]
+    # =====================================================
+    # MOVE
+    # =====================================================
 
-            self.program.append(
-                f"PTP {{X {x},Y {y},Z {z}}}"
+    def move(self, cmd, points):
+
+        target = cmd["target"]
+
+        point = points[target]
+
+        # ---------------------------------------------
+        # DAT POSITION
+        # ---------------------------------------------
+
+        self.dat_lines.append(
+
+            f"DECL E6POS {target.upper()}={{"
+
+            f"X {point['x']},"
+
+            f"Y {point['y']},"
+
+            f"Z {point['z']}"
+
+            f"}}"
+        )
+
+        # ---------------------------------------------
+        # SRC COMMAND
+        # ---------------------------------------------
+
+        self.lines.append(
+
+            f"LIN {target.upper()}"
+        )
+
+    # =====================================================
+    # HOME
+    # =====================================================
+
+    def home(self, cmd):
+
+        self.lines.append("PTP HOME")
+
+    # =====================================================
+    # GRAB
+    # =====================================================
+
+    def grab(self):
+
+        self.lines.append("; GRAB")
+
+    # =====================================================
+    # RELEASE
+    # =====================================================
+
+    def release(self):
+
+        self.lines.append("; RELEASE")
+
+    # =====================================================
+    # SAVE FILES
+    # =====================================================
+
+    def save(self):
+
+        # SRC END
+
+        self.lines.append("")
+        self.lines.append("END")
+
+        # DAT END
+
+        self.dat_lines.append("")
+        self.dat_lines.append("ENDDAT")
+
+        # SAVE SRC
+
+        with open(
+
+            "output/kuka.src",
+
+            "w"
+
+        ) as f:
+
+            f.write(
+
+                "\n".join(self.lines)
             )
 
-        elif command["type"] == "grab":
+        # SAVE DAT
 
-            self.program.append(
-                "GRIPPER_CLOSE"
+        with open(
+
+            "output/kuka.dat",
+
+            "w"
+
+        ) as f:
+
+            f.write(
+
+                "\n".join(self.dat_lines)
             )
-
-        elif command["type"] == "release":
-
-            self.program.append(
-                "GRIPPER_OPEN"
-            )
-
-        elif command["type"] == "home":
-
-            self.program.append(
-                "PTP HOME"
-            )
-
-    def save(self, filename):
-
-        with open(filename, "w") as f:
-
-            f.write("&ACCESS RVP\n")
-            f.write("&REL 1\n\n")
-
-            for line in self.program:
-                f.write(line + "\n")
