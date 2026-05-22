@@ -68,7 +68,7 @@ editor.setSize(
 
     "100%",
 
-    "900px"
+    "600px"
 );
 
 
