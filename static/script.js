@@ -238,6 +238,59 @@ async function runCode() {
     }
 }
 
+// =========================================
+// SIMULATE
+// =========================================
+
+async function simulateCode() {
+
+    try {
+
+        const code = editor.getValue();
+
+        const response = await fetch(
+
+            "/simulate",
+
+            {
+
+                method: "POST",
+
+                headers: {
+
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify({
+
+                    code: code
+                })
+            }
+        );
+
+        const result = await response.json();
+
+        if (!result.success) {
+
+            alert(result.error);
+
+            return;
+        }
+
+        alert(
+
+            "RoboDK simulation started"
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        alert(error);
+    }
+}
 
 // =========================================
 // SAVE RCML

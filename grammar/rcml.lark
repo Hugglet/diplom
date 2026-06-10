@@ -12,32 +12,65 @@ statement: robot_decl
          | wait_cmd
          | "}"
 
-robot_decl: "robot" NAME NAME
+# =====================================================
+# ROBOTS
+# =====================================================
+
+robot_decl: "robot" ROBOT NAME
+
+# =====================================================
+# POINTS
+# =====================================================
 
 point_decl: "point" NAME "(" NUMBER "," NUMBER "," NUMBER ")"
+
+# =====================================================
+# BLOCKS
+# =====================================================
 
 task_decl: "task" NAME "{"
 
 parallel_decl: "parallel" "{"
 
-move_cmd: NAME "." "move" NAME
+# =====================================================
+# COMMANDS
+# =====================================================
 
-grab_cmd: NAME "." "grab"
+move_cmd: ROBOT "." "move" NAME
 
-release_cmd: NAME "." "release"
+grab_cmd: ROBOT "." "grab"
 
-home_cmd: NAME "." "home"
+release_cmd: ROBOT "." "release"
+
+home_cmd: ROBOT "." "home"
 
 sync_cmd: "sync"
 
 wait_cmd: "wait" NUMBER
 
+# =====================================================
+# TOKENS
+# =====================================================
+
+ROBOT: "kuka"
+     | "ur"
+     | "auto"
+
 NAME: /[a-zA-Z_][a-zA-Z0-9_]*/
 
 NUMBER: /\d+/
 
+# =====================================================
+# IMPORTS
+# =====================================================
+
 %import common.WS
+
 %ignore WS
+
+# =====================================================
+# COMMENTS
+# =====================================================
 
 COMMENT: /#[^\n]*/
 

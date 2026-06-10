@@ -1,17 +1,6 @@
 from interpreter.backends.kuka_adapter import KukaAdapter
 from interpreter.backends.ur_adapter import URAdapter
 
-# RoboDK OPTIONAL
-try:
-
-    from simulation.robodk_bridge import RoboDKBridge
-
-    ROBODK_AVAILABLE = True
-
-except:
-
-    ROBODK_AVAILABLE = False
-
 
 class Dispatcher:
 
@@ -20,26 +9,6 @@ class Dispatcher:
         self.kuka = KukaAdapter()
 
         self.ur = URAdapter()
-
-        # =============================================
-        # OPTIONAL ROBO DK
-        # =============================================
-
-        self.sim = None
-
-        if ROBODK_AVAILABLE:
-
-            try:
-
-                self.sim = RoboDKBridge()
-
-            except Exception as e:
-
-                print(
-
-                    "RoboDK init error:",
-                    e
-                )
 
     # =====================================================
     # DISPATCH
@@ -90,34 +59,6 @@ class Dispatcher:
 
             adapter.move(cmd, points)
 
-            # =============================================
-            # OPTIONAL ROBO DK SIMULATION
-            # =============================================
-
-            if self.sim:
-
-                try:
-
-                    target = points[cmd["target"]]
-
-                    self.sim.move_robot(
-
-                        cmd["robot"],
-
-                        target["x"],
-                        target["y"],
-                        target["z"]
-
-                    )
-
-                except Exception as e:
-
-                    print(
-
-                        "RoboDK move error:",
-                        e
-                    )
-
         # -------------------------------------------------
         # HOME
         # -------------------------------------------------
@@ -125,25 +66,6 @@ class Dispatcher:
         elif cmd_type == "home":
 
             adapter.home(cmd)
-
-            # OPTIONAL ROBO DK
-
-            if self.sim:
-
-                try:
-
-                    self.sim.home(
-
-                        cmd["robot"]
-                    )
-
-                except Exception as e:
-
-                    print(
-
-                        "RoboDK home error:",
-                        e
-                    )
 
         # -------------------------------------------------
         # GRAB

@@ -1,5 +1,6 @@
 import json
 import math
+import os
 
 
 class Scheduler:
@@ -7,12 +8,42 @@ class Scheduler:
     def __init__(self):
 
         # =================================================
-        # LOAD ENVIRONMENT CONFIG
+        # PROJECT ROOT
+        # =================================================
+
+        BASE_DIR = os.path.abspath(
+
+            os.path.join(
+
+                os.path.dirname(__file__),
+
+                ".."
+            )
+        )
+
+        # =================================================
+        # CONFIG FILE
+        # =================================================
+
+        config_path = os.path.join(
+
+            BASE_DIR,
+
+            "config",
+
+            "environment.json"
+        )
+
+        print("\nCONFIG PATH:")
+        print(config_path)
+
+        # =================================================
+        # LOAD CONFIG
         # =================================================
 
         with open(
 
-            "config/environment.json",
+            config_path,
 
             "r",
 
@@ -88,32 +119,32 @@ class Scheduler:
         score = 0
 
         # -------------------------------------------------
-        # 1. DIMENSIONS
+        # 1. OBJECT DIMENSIONS
         # -------------------------------------------------
 
         score += (
 
-            task["dimensions"] *
+            task["dimensions"]
 
-            self.weights["dimensions"]
+            * self.weights["dimensions"]
         )
 
         # -------------------------------------------------
-        # 2. MASS
+        # 2. PAYLOAD / MASS
         # -------------------------------------------------
 
         payload_ratio = (
 
-            robot["payload"] /
+            robot["payload"]
 
-            task["mass"]
+            / max(task["mass"], 0.1)
         )
 
         score += (
 
-            payload_ratio *
+            payload_ratio
 
-            self.weights["mass"]
+            * self.weights["mass"]
         )
 
         # -------------------------------------------------
@@ -127,34 +158,33 @@ class Scheduler:
             target_point
         )
 
-        distance_score = 1 / (
-
-            distance + 1
-        )
+        distance_score = 1 / (distance + 1)
 
         score += (
 
-            distance_score *
+            distance_score
 
-            self.weights["distance"] * 100
+            * self.weights["distance"]
+
+            * 100
         )
 
         # -------------------------------------------------
-        # 4. TIME
+        # 4. EXECUTION TIME
         # -------------------------------------------------
 
         time_score = (
 
-            robot["speed"] /
+            robot["speed"]
 
-            task["time"]
+            / max(task["time"], 0.1)
         )
 
         score += (
 
-            time_score *
+            time_score
 
-            self.weights["time"]
+            * self.weights["time"]
         )
 
         # -------------------------------------------------
@@ -163,18 +193,18 @@ class Scheduler:
 
         workspace_score = (
 
-            robot["reach"] / 20
+            robot.get("reach", 500) / 20
         )
 
         score += (
 
-            workspace_score *
+            workspace_score
 
-            self.weights["workspace"]
+            * self.weights["workspace"]
         )
 
         # -------------------------------------------------
-        # 6. SINGULARITY
+        # 6. SINGULARITY RISK
         # -------------------------------------------------
 
         singularity_penalty = (
@@ -184,25 +214,25 @@ class Scheduler:
 
         score -= (
 
-            singularity_penalty *
+            singularity_penalty
 
-            self.weights["singularity"]
+            * self.weights["singularity"]
         )
 
         # -------------------------------------------------
-        # 7. PRECISION
+        # 7. POSITIONING ACCURACY
         # -------------------------------------------------
 
         precision_score = (
 
-            1 / robot["accuracy"]
+            1 / max(robot["accuracy"], 0.001)
         )
 
         score += (
 
-            precision_score *
+            precision_score
 
-            self.weights["precision"]
+            * self.weights["precision"]
         )
 
         # -------------------------------------------------
@@ -211,13 +241,13 @@ class Scheduler:
 
         score += (
 
-            robot["speed"] *
+            robot["speed"]
 
-            self.weights["speed"]
+            * self.weights["speed"]
         )
 
         # -------------------------------------------------
-        # 9. LOAD
+        # 9. CURRENT LOAD
         # -------------------------------------------------
 
         load_penalty = (
@@ -227,13 +257,13 @@ class Scheduler:
 
         score -= (
 
-            load_penalty *
+            load_penalty
 
-            self.weights["load"]
+            * self.weights["load"]
         )
 
         # -------------------------------------------------
-        # 10. ENERGY
+        # 10. ENERGY CONSUMPTION
         # -------------------------------------------------
 
         energy_penalty = (
@@ -243,9 +273,9 @@ class Scheduler:
 
         score -= (
 
-            energy_penalty *
+            energy_penalty
 
-            self.weights["energy"]
+            * self.weights["energy"]
         )
 
         return score
@@ -268,6 +298,8 @@ class Scheduler:
 
         best_score = -999999
 
+        print("\n========== ROBOT ANALYSIS ==========")
+
         # =================================================
         # ANALYZE ROBOTS
         # =================================================
@@ -275,10 +307,17 @@ class Scheduler:
         for robot_name, robot in self.robots.items():
 
             # ---------------------------------------------
-            # HARD LIMITS
+            # PAYLOAD LIMIT
             # ---------------------------------------------
 
             if robot["payload"] < task["mass"]:
+
+                print(
+
+                    robot_name,
+
+                    "SKIPPED: payload too low"
+                )
 
                 continue
 
@@ -296,7 +335,10 @@ class Scheduler:
             print(
 
                 robot_name,
-                score
+
+                "SCORE:",
+
+                round(score, 2)
             )
 
             # ---------------------------------------------
@@ -308,5 +350,12 @@ class Scheduler:
                 best_score = score
 
                 best_robot = robot_name
+
+        print(
+
+            "\nAUTO SELECTED:",
+
+            best_robot
+        )
 
         return best_robot

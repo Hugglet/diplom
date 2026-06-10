@@ -1,0 +1,176 @@
+{
+    "robots": {
+
+        "kuka": {
+
+            "model": "KR3",
+
+            "position": {
+
+                "x": 0,
+                "y": 0,
+                "z": 0
+            },
+
+            "reach": 600,
+
+            "payload": 3,
+
+            "speed": 1.2,
+
+            "accuracy": 0.02,
+
+            "energy_factor": 1.4,
+
+            "current_load": 0.3,
+
+            "workspace": "zone_a"
+        },
+
+        "ur": {
+
+            "model": "UR3e",
+
+            "position": {
+
+                "x": 900,
+                "y": 0,
+                "z": 0
+            },
+
+            "reach": 500,
+
+            "payload": 3,
+
+            "speed": 1.0,
+
+            "accuracy": 0.01,
+
+            "energy_factor": 1.1,
+
+            "current_load": 0.5,
+
+            "workspace": "zone_b"
+        }
+    },
+
+    "workspaces": {
+
+        "zone_a": {
+
+            "x_min": 0,
+            "x_max": 700,
+
+            "y_min": 0,
+            "y_max": 700
+        },
+
+        "zone_b": {
+
+            "x_min": 700,
+            "x_max": 1400,
+
+            "y_min": 0,
+            "y_max": 700
+        }
+    },
+
+    "conveyor": {
+
+        "start": {
+
+            "x": 100,
+            "y": 300,
+            "z": 200
+        },
+
+        "end": {
+
+            "x": 1200,
+            "y": 300,
+            "z": 200
+        },
+
+        "speed": 0.4
+    },
+
+    "objects": [
+
+        {
+
+            "id": "box_red_1",
+
+            "type": "red_box",
+
+            "weight": 1.2,
+
+            "size": {
+
+                "width": 100,
+                "height": 100,
+                "depth": 100
+            },
+
+            "position": {
+
+                "x": 250,
+                "y": 300,
+                "z": 200
+            }
+        },
+
+        {
+
+            "id": "box_blue_1",
+
+            "type": "blue_box",
+
+            "weight": 2.1,
+
+            "size": {
+
+                "width": 120,
+                "height": 120,
+                "depth": 120
+            },
+
+            "position": {
+
+                "x": 500,
+                "y": 300,
+                "z": 200
+            }
+        }
+    ],
+
+    "safe_positions": {
+
+        "kuka_safe": {
+
+            "x": 150,
+            "y": 150,
+            "z": 500
+        },
+
+        "ur_safe": {
+
+            "x": 1000,
+            "y": 150,
+            "z": 500
+        }
+    },
+
+    "collision_zones": [
+
+        {
+
+            "name": "shared_zone",
+
+            "x_min": 600,
+            "x_max": 800,
+
+            "y_min": 200,
+            "y_max": 500
+        }
+    ]
+}

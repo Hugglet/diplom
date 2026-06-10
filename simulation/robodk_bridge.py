@@ -1,20 +1,108 @@
-from robodk.robolink import *
-from robodk.robomath import *
+from robodk.robolink import Robolink
+from robodk.robomath import transl
 
-RDK = Robolink()
+import os
+import subprocess
+import time
 
 
 class RoboDKBridge:
 
     def __init__(self):
 
-        self.robots = {}
+        try:
+
+            # =============================================
+            # ROBO DK EXECUTABLE
+            # =============================================
+
+            robodk_exe = (
+
+                r"C:\Program Files\RoboDK\RoboDK.exe"
+            )
+
+            # =============================================
+            # SCENE
+            # =============================================
+
+            self.scene_path = (
+
+                r"C:\SUAI\Diplom\Scenes\R-SUAI_conveyor.rdk"
+            )
+
+            # =============================================
+            # START ROBO DK
+            # =============================================
+
+            subprocess.Popen([
+
+                robodk_exe,
+
+                self.scene_path
+            ])
+
+            print(
+
+                "\nStarting RoboDK..."
+            )
+
+            # =============================================
+            # WAIT STARTUP
+            # =============================================
+
+            time.sleep(5)
+
+            # =============================================
+            # CONNECT API
+            # =============================================
+
+            self.RDK = Robolink()
+
+            print(
+
+                "\nRoboDK connected"
+            )
+
+            # =============================================
+            # RUN MAIN PROGRAM
+            # =============================================
+
+            main_program = self.RDK.Item(
+
+                "MAIN_SCENE"
+            )
+
+            if main_program.Valid():
+
+                print(
+
+                    "\nRunning MAIN_SCENE"
+                )
+
+                main_program.RunProgram()
+
+            else:
+
+                print(
+
+                    "\nMAIN_SCENE not found"
+                )
+
+        except Exception as e:
+
+            print(
+
+                "\nRoboDK connection error:",
+                e
+            )
+
+            self.RDK = None
 
     # =====================================================
-    # CONNECT ROBOT
+    # GET ROBOT
     # =====================================================
 
-    def connect_robot(
+    def get_robot(
 
         self,
 
@@ -22,16 +110,23 @@ class RoboDKBridge:
 
     ):
 
-        robot = RDK.Item(robot_name)
+        if self.RDK is None:
+
+            return None
+
+        robot = self.RDK.Item(
+
+            robot_name
+        )
 
         if not robot.Valid():
 
-            raise Exception(
+            print(
 
-                f"Robot not found: {robot_name}"
+                f"\nRobot not found: {robot_name}"
             )
 
-        self.robots[robot_name] = robot
+            return None
 
         return robot
 
@@ -53,23 +148,46 @@ class RoboDKBridge:
 
     ):
 
-        robot = self.robots.get(robot_name)
+        try:
 
-        if not robot:
+            robot = self.get_robot(
 
-            robot = self.connect_robot(
                 robot_name
             )
 
-        target = transl(x, y, z)
+            if robot is None:
 
-        robot.MoveL(target)
+                return
+
+            target = transl(
+
+                x,
+                y,
+                z
+            )
+
+            robot.MoveJ(target)
+
+            print(
+
+                f"\n{robot_name} moved to",
+
+                x, y, z
+            )
+
+        except Exception as e:
+
+            print(
+
+                "\nRoboDK move error:",
+                e
+            )
 
     # =====================================================
-    # HOME
+    # MOVE HOME
     # =====================================================
 
-    def home(
+    def move_home(
 
         self,
 
@@ -77,14 +195,31 @@ class RoboDKBridge:
 
     ):
 
-        robot = self.robots.get(robot_name)
+        try:
 
-        if not robot:
+            robot = self.get_robot(
 
-            robot = self.connect_robot(
                 robot_name
             )
 
-        home = robot.JointsHome()
+            if robot is None:
 
-        robot.MoveJ(home)
+                return
+
+            robot.MoveJ(
+
+                robot.JointsHome()
+            )
+
+            print(
+
+                f"\n{robot_name} HOME"
+            )
+
+        except Exception as e:
+
+            print(
+
+                "\nRoboDK home error:",
+                e
+            )

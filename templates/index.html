@@ -85,6 +85,14 @@
 
                 </button>
 
+                <!-- SIMULATE -->
+
+                <button onclick="simulateCode()">
+
+                    ▶ Simulate RoboDK
+
+                </button>
+
             </div>
 
             <!-- ================================= -->
@@ -183,84 +191,76 @@
 
         <div class="right-panel">
 
-            <!-- ================================= -->
-            <!-- KUKA SRC -->
-            <!-- ================================= -->
+    <!-- KUKA SRC -->
 
-            <div class="output-box"
-                 id="kuka_src_box"
-                 style="display:none;">
+    <div class="output-box"
+         id="kuka_src_box"
+         style="display:none;">
 
-                <h2>KUKA SRC Output</h2>
+        <h2>KUKA SRC Output</h2>
 
-                <pre id="kuka_src"></pre>
+        <pre id="kuka_src"></pre>
 
-                <button
-                    type="button"
-                    onclick="saveOutput(
-                        'kuka_src',
-                        'program.src'
-                    )">
+        <button
+            type="button"
+            onclick="saveOutput(
+                'kuka_src',
+                'program.src'
+            )">
 
-                    Save .src
+            Save .src
 
-                </button>
-
-            </div>
-
-            <!-- ================================= -->
-            <!-- KUKA DAT -->
-            <!-- ================================= -->
-
-            <div class="output-box"
-                 id="kuka_dat_box"
-                 style="display:none;">
-
-                <h2>KUKA DAT Output</h2>
-
-                <pre id="kuka_dat"></pre>
-
-                <button
-                    type="button"
-                    onclick="saveOutput(
-                        'kuka_dat',
-                        'program.dat'
-                    )">
-
-                    Save .dat
-
-                </button>
-
-            </div>
-
-            <!-- ================================= -->
-            <!-- UR SCRIPT -->
-            <!-- ================================= -->
-
-            <div class="output-box"
-                 id="ur_box"
-                 style="display:none;">
-
-                <h2>URScript Output</h2>
-
-                <pre id="ur_output"></pre>
-
-                <button
-                    type="button"
-                    onclick="saveOutput(
-                        'ur_output',
-                        'program.script'
-                    )">
-
-                    Save .script
-
-                </button>
-
-            </div>
-
-        </div>
+        </button>
 
     </div>
+
+    <!-- KUKA DAT -->
+
+    <div class="output-box"
+         id="kuka_dat_box"
+         style="display:none;">
+
+        <h2>KUKA DAT Output</h2>
+
+        <pre id="kuka_dat"></pre>
+
+        <button
+            type="button"
+            onclick="saveOutput(
+                'kuka_dat',
+                'program.dat'
+            )">
+
+            Save .dat
+
+        </button>
+
+    </div>
+
+    <!-- UR SCRIPT -->
+
+    <div class="output-box"
+         id="ur_box"
+         style="display:none;">
+
+        <h2>URScript Output</h2>
+
+        <pre id="ur_output"></pre>
+
+        <button
+            type="button"
+            onclick="saveOutput(
+                'ur_output',
+                'program.script'
+            )">
+
+            Save .script
+
+        </button>
+
+    </div>
+
+</div>
 
     <!-- JS -->
 
