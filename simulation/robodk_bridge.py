@@ -18,7 +18,7 @@ class RoboDKBridge:
 
             robodk_exe = (
 
-                r"C:\Program Files\RoboDK\RoboDK.exe"
+                r"C:\RoboDK\bin\RoboDK.exe"
             )
 
             # =============================================
